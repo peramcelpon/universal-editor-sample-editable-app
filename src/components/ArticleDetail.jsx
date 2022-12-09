@@ -5,7 +5,7 @@ NOTICE: Adobe permits you to use, modify, and distribute this file in
 accordance with the terms of the Adobe license agreement accompanying
 it.
 */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 import backIcon from '../images/icon-close.svg';
 import Error from './Error';
@@ -13,8 +13,6 @@ import Loading from './Loading';
 import { mapJsonRichText } from '../utils/renderRichText';
 import './AdventureDetail.scss';
 import useGraphQL from '../api/useGraphQL';
-import { getEditorContext } from '@aem-sites/universal-editor-cors';
-
 
 function ArticleDetail() {
 
@@ -36,12 +34,12 @@ function ArticleDetail() {
 
     //Set adventure properties variable based on graphQL response
     const currentArticle = getArticle(data);
-    
+
     //Must have title, path, and image
     if( !currentArticle) {
       return <NoArticleFound />;
     }
-    
+
     return (<div className="adventure-detail">
         <button className="adventure-detail-close-button" onClick={() => navigate(-1)} >
             <img className="Backbutton-icon" src={backIcon} alt="Return" />
@@ -50,18 +48,13 @@ function ArticleDetail() {
     </div>);
 }
 
-function ArticleDetailRender({_path, title, 
+function ArticleDetailRender({_path, title,
     featuredImage, slug,
                                 main,
                                 authorFragment}) {
 
-    const [isInEditor,setIsInEditor] = useState(false);
-    const editorProps = useMemo(() => isInEditor && { itemID: _path, itemType: "text/fragment" }, [isInEditor, _path]);
-    
-    useEffect(() => {
-        getEditorContext({ isInEditor: setIsInEditor });
-    }, []);
-  
+    const editorProps = useMemo(() => true && { itemID: _path, itemType: "text/fragment" }, [_path]);
+
     return (<div itemScope {...editorProps}>
             <h1 className="adventure-detail-title" itemProp="title" itemType="text">{title}</h1>
             <div className="adventure-detail-info">
@@ -72,7 +65,7 @@ function ArticleDetailRender({_path, title,
                 <img className="adventure-detail-primaryimage"
                     src={featuredImage._path} alt={title}/>
             <div>{mapJsonRichText(main.json)}</div>
-            
+
             </div>
     </div>
     );
@@ -92,7 +85,7 @@ function NoArticleFound() {
 
 /**
  * Helper function to get the first adventure from the response
- * @param {*} response 
+ * @param {*} response
  */
 function getArticle(data) {
     if(data && data.articleList && data.articleList.items) {

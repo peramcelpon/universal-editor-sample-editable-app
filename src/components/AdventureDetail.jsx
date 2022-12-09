@@ -5,7 +5,7 @@ NOTICE: Adobe permits you to use, modify, and distribute this file in
 accordance with the terms of the Adobe license agreement accompanying
 it.
 */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 // import CurrencyFormat from 'react-currency-format';
 import backIcon from '../images/icon-close.svg';
@@ -14,8 +14,6 @@ import Loading from './Loading';
 import { mapJsonRichText } from '../utils/renderRichText';
 import './AdventureDetail.scss';
 import useGraphQL from '../api/useGraphQL';
-import { getEditorContext } from '@aem-sites/universal-editor-cors';
-
 
 function AdventureDetail() {
 
@@ -37,7 +35,7 @@ function AdventureDetail() {
 
     //Set adventure properties variable based on graphQL response
     const currentAdventure = getAdventure(data);
-    
+
     // set references of current adventure
     const references = data.adventureList._references;
 
@@ -45,7 +43,7 @@ function AdventureDetail() {
     if( !currentAdventure) {
       return <NoAdventureFound />;
     }
-    
+
     return (<div className="adventure-detail">
         <button className="adventure-detail-close-button" onClick={() => navigate(-1)} >
             <img className="Backbutton-icon" src={backIcon} alt="Return" />
@@ -54,10 +52,10 @@ function AdventureDetail() {
     </div>);
 }
 
-function AdventureDetailRender({_path, title, 
-                                primaryImage, 
+function AdventureDetailRender({_path, title,
+                                primaryImage,
                                 activity,
-                                adventureType, 
+                                adventureType,
                                 tripLength,
                                 groupSize,
                                 difficulty,
@@ -65,13 +63,7 @@ function AdventureDetailRender({_path, title,
                                 description,
                                 itinerary,
                                 contributor, references}) {
-    const [isInEditor,setIsInEditor] = useState(false);
-    const editorProps = useMemo(() => isInEditor && { itemID: _path, itemType: "urn:fcs:type/fragment" }, [isInEditor, _path]);
-
-    useEffect(() => {
-        getEditorContext({ isInEditor: setIsInEditor });
-    }, []);
-    
+    const editorProps = useMemo(() => true && { itemID: _path, itemType: "urn:fcs:type/fragment" }, [_path]);
 
     return (<div {...editorProps} itemScope>
             <h1 className="adventure-detail-title">{title}</h1>
@@ -116,7 +108,7 @@ function NoAdventureFound() {
 
 /**
  * Helper function to get the first adventure from the response
- * @param {*} response 
+ * @param {*} response
  */
 function getAdventure(data) {
 
@@ -138,7 +130,7 @@ function customRenderOptions(references) {
         // node contains merged properties of the in-line reference and _references object
         'ImageRef': (node) => {
             // when __typename === ImageRef
-           return <img src={node._path} alt={'in-line reference'} /> 
+           return <img src={node._path} alt={'in-line reference'} />
         },
         'AdventureModel': (node) => {
             // when __typename === AdventureModel
@@ -152,7 +144,7 @@ function customRenderOptions(references) {
 
                 // variable for reference in _references object
                 let reference;
-                
+
                 // asset reference
                 if(node.data.path) {
                     // find reference based on path

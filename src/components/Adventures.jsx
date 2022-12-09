@@ -5,23 +5,17 @@ NOTICE: Adobe permits you to use, modify, and distribute this file in
 accordance with the terms of the Adobe license agreement accompanying
 it.
 */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {Link} from 'react-router-dom';
 import useGraphQL from '../api/useGraphQL';
 import Error from './Error';
 import Loading from './Loading';
 import "./Adventures.scss";
-import { getEditorContext } from '@aem-sites/universal-editor-cors';
 
 const { REACT_APP_PUBLISH_URI } =process.env;
 
 function AdventureItem(props) {
-  const [isInEditor,setIsInEditor] = useState(false);
-  const editorProps = useMemo(() => isInEditor && { itemID: "urn:aemconnection:" + props?._path + "/jcr:content/data/master", itemType: "reference", itemfilter: "cf"}, [isInEditor, props._path]);
-
-  useEffect(() => {
-    getEditorContext({ isInEditor: setIsInEditor });
-  }, []);
+  const editorProps = useMemo(() => true && { itemID: "urn:aemconnection:" + props?._path + "/jcr:content/data/master", itemType: "reference", itemfilter: "cf"}, [props._path]);
 
   //Must have title, path, and image
   if(!props || !props._path || !props.title || !props.primaryImage ) {
