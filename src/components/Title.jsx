@@ -6,32 +6,32 @@ NOTICE: Adobe permits you to use, modify, and distribute this file in
 accordance with the terms of the Adobe license agreement accompanying
 it.
 */
-import React, { useEffect, useState, useMemo } from 'react';
-import { getEditorContext } from '@aem-sites/universal-editor-cors';
+import React, {useEffect, useMemo} from 'react';
 import {fetchData} from '../utils/fetchData';
 
 const Title = (props) => {
-  const { itemID, itemProp, itemType, className } = props;
-  const [isInEditor,setIsInEditor] = useState(false);
-  const editorProps = useMemo(() => isInEditor && {
+  const {itemID, itemProp = "jcr:title", itemType, className, data: initialData, isComponent = false} = props;
+  const editorProps = useMemo(() => true && {
     itemID,
     itemProp,
-    itemType
-  }, [isInEditor, itemID, itemProp, itemType]);
+    itemType,
+    "data-editor-behavior": isComponent
+  }, [itemID, itemProp, itemType, isComponent]);
 
+  const [data, setData] = React.useState(initialData || {});
   useEffect(() => {
-    getEditorContext({ isInEditor: setIsInEditor });
-  }, []);
+    if (!itemID || !itemProp) return;
+    if (!initialData) {
+      fetchData(itemID).then((data) => setData(data))
+    }
+    ;
+  }, [itemID, itemProp, initialData]);
 
-  const [data,setData] = React.useState({});
-  useEffect(() => {
-    if(!itemID || !itemProp) return;
-    fetchData(itemID).then((data) => setData(data));
-  }, [itemID, itemProp]);
+  if (!data.type) return null;
 
   const TitleTag = `${data.type}`;
   return (
-    <TitleTag {...editorProps} className={className}>{data.text}</TitleTag>
+      <TitleTag {...editorProps} className={className}>{data.text}</TitleTag>
   );
 };
 
