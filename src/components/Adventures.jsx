@@ -5,7 +5,7 @@ NOTICE: Adobe permits you to use, modify, and distribute this file in
 accordance with the terms of the Adobe license agreement accompanying
 it.
 */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import useGraphQL from '../api/useGraphQL';
 import Error from './Error';
@@ -15,46 +15,31 @@ import "./Adventures.scss";
 const { REACT_APP_PUBLISH_URI } =process.env;
 
 function AdventureItem(props) {
-  const editorProps = useMemo(() => true && { itemID: "urn:aemconnection:" + props?._path + "/jcr:content/data/master", itemType: "reference", itemfilter: "cf"}, [props._path]);
+    const editorProps = {
+        itemID: "urn:aemconnection:" + props?._path + "/jcr:content/data/master",
+        itemType: "reference",
+        itemfilter: "cf"
+    };
 
-  //Must have title, path, and image
-  if(!props || !props._path || !props.title || !props.primaryImage ) {
-    return null;
-  }
+    //Must have title, path, and image
+    if (!props || !props._path || !props.title || !props.primaryImage) {
+        return null;
+    }
 
-  return (
-         <li className="adventure-item" itemScope {...editorProps}>
-          <Link to={`/adventure:${props.slug}`}>
-            <img className="adventure-item-image" src={`${REACT_APP_PUBLISH_URI}${props.primaryImage._path}`}
-                alt={props.title} itemProp="primaryImage" itemType="image" />
-          </Link>
-          <div className="adventure-item-length-price">
-            <div className="adventure-item-length" itemProp="tripLength" itemType="text">{props.tripLength}</div>
-            <div className="adventure-item-price" itemProp="price" itemType="text">${props.price}</div>
-          </div>
-          <div className="adventure-item-title" itemProp="title" itemType="text">{props.title}</div>
+    return (
+        <li className="adventure-item" itemScope {...editorProps}>
+            <Link to={`/adventure:${props.slug}`}>
+                <img className="adventure-item-image" src={`${REACT_APP_PUBLISH_URI}${props.primaryImage._path}`}
+                     alt={props.title} itemProp="primaryImage" itemType="image"/>
+            </Link>
+            <div className="adventure-item-length-price">
+                <div className="adventure-item-length" itemProp="tripLength" itemType="text">{props.tripLength}</div>
+                <div className="adventure-item-price">$<span itemProp="price" itemType="text">{props.price}</span></div>
+            </div>
+            <div className="adventure-item-title" itemProp="title" itemType="text">{props.title}</div>
       </li>
   );
 }
-
-// import { EditableCF } from '@aem-sites/universal-editor-react';
-
-// const Image = ({ _path, title }) => (
-//   <img className="adventure-item-image" src={_path} alt={title} />
-// );
-
-// function AdventureItem({ _path, slug, ...props}) {
-//   if(!props || !_path || !props.title || !props.primaryImage ) {
-//     return null;
-//   }
-//   return (
-//     <li className="adventure-item">
-//       <EditableCF data={props} path={_path} components={{
-//         primaryImage: <Image />
-//       }}/>
-//     </li>
-//   );
-// }
 
 function Adventures() {
   const persistentQuery = 'wknd-shared/adventures-all';
