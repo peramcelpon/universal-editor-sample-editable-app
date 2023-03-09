@@ -11,8 +11,7 @@ import useGraphQL from '../api/useGraphQL';
 import Error from './Error';
 import Loading from './Loading';
 import "./Adventures.scss";
-
-const { REACT_APP_PUBLISH_URI } =process.env;
+import {getPublishHost} from "../utils/fetchData";
 
 function AdventureItem(props) {
     const editorProps = {
@@ -26,17 +25,17 @@ function AdventureItem(props) {
         return null;
     }
 
-    return (
-        <li className="adventure-item" itemScope {...editorProps}>
-            <Link to={`/adventure:${props.slug}`}>
-                <img className="adventure-item-image" src={`${REACT_APP_PUBLISH_URI}${props.primaryImage._path}`}
-                     alt={props.title} itemProp="primaryImage" itemType="image"/>
-            </Link>
-            <div className="adventure-item-length-price">
-                <div className="adventure-item-length" itemProp="tripLength" itemType="text">{props.tripLength}</div>
-                <div className="adventure-item-price">$<span itemProp="price" itemType="text">{props.price}</span></div>
-            </div>
-            <div className="adventure-item-title" itemProp="title" itemType="text">{props.title}</div>
+  return (
+         <li className="adventure-item" itemScope {...editorProps}>
+          <Link to={`/adventure:${props.slug}`}>
+            <img className="adventure-item-image" src={`${getPublishHost()}${props.primaryImage._path}`}
+                alt={props.title} itemProp="primaryImage" itemType="image" />
+          </Link>
+          <div className="adventure-item-length-price">
+              <div className="adventure-item-length" itemProp="tripLength" itemType="text">{props.tripLength}</div>
+              <div className="adventure-item-price">$<span itemProp="price" itemType="text">{props.price}</span></div>
+          </div>
+          <div className="adventure-item-title" itemProp="title" itemType="text">{props.title}</div>
       </li>
   );
 }
