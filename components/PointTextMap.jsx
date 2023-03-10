@@ -41,11 +41,7 @@ export default function PointTextMap({ data }) {
                     Buy for {item.pricetag}
                   </a>
                 </div>
-                <div className="text"
-                     itemScope
-                     itemID={`urn:aem:${item._path}/jcr:content/data/master`}
-                     itemProp="text"
-                     itemType="text">
+                <div className="text">
                   {item.text}
                 </div>
                 <div className="arrow" />

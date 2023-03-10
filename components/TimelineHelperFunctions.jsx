@@ -23,7 +23,6 @@ const createScrollTriggerAnimation = (gsap, q, animation, instant) => {
   // apply animation based on what is present
   if (animation.to && animation.from) {
     gsap.fromTo(q(animation.selector), animation.from, animation.to);
-    return;
   } else {
     if (animation.to) {
       gsap.to(q(animation.selector), animation.to);
@@ -34,7 +33,7 @@ const createScrollTriggerAnimation = (gsap, q, animation, instant) => {
   }
 };
 
-const createAnimationTimeline = (gsap, q, timelineArray, timelineSettings, runOnEnd, debugAnim) => {
+const createAnimationTimeline = (gsap, q, timelineArray, timelineSettings, runOnEnd, debugAnim, isEditable) => {
   if (!timelineArray || timelineArray.length === 0) {
     return runOnEnd();
   }
@@ -58,6 +57,7 @@ const createAnimationTimeline = (gsap, q, timelineArray, timelineSettings, runOn
 
       // if animation has a Scrolltrigger, exclude it from timeline
       if (animation?.to?.scrollTrigger || animation?.from?.scrollTrigger) {
+        if (isEditable) return;
         createScrollTriggerAnimation(gsap, q, animation, instant);
         continue;
       }

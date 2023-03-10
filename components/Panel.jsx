@@ -1,11 +1,12 @@
-import {useContext, useEffect} from "react";
-import Background from "../components/Background";
-import LayerImage from "../components/LayerImage";
-import TextLayer from "../components/TextLayer";
+import { useContext, useEffect } from "react";
+import Background from "./Background";
+import LayerImage from "./LayerImage";
+import TextLayer from "./TextLayer";
 import PointTextMap from "./PointTextMap";
 import Header from "./Header";
-import {TimelineProvider} from "./TimelineWrapper";
-import {scrollToId} from "../components/utils";
+import { TimelineProvider } from "./TimelineWrapper";
+import { scrollToId } from "../utils";
+import { useRouter } from "next/router";
 
 const lookupObject = {
 	image: LayerImage,
@@ -16,19 +17,23 @@ const lookupObject = {
 };
 
 export default function Panel({
-								  panel,
-								  panelNr,
-								  settings,
-								  runOnEnd,
-								  isAuthorVersion,
-								  host,
-								  hash,
-								  ignoreHash,
-								  setIgnoreHash,
-								  viewType,
-								  dynamicPanelHeight
-							  }) {
+		panel,
+		panelNr,
+		settings,
+		runOnEnd,
+		isAuthorVersion,
+		host,
+		hash,
+		ignoreHash,
+		setIgnoreHash,
+		viewType,
+	  	dynamicPanelHeight
+	}) {
 	const createTimeline = useContext(TimelineProvider);
+
+	const router = useRouter();
+	const params = router.query;
+	const isInEditor = params?.authorHost && params?.isEditable === 'true';
 
 	useEffect(() => {
 		if (!createTimeline) {
@@ -48,9 +53,11 @@ export default function Panel({
 		}
 	}, [hash, ignoreHash, panel.id, setIgnoreHash]);
 
-	return (
-		<div className={`panel ${panel?.dark ? "darkPanel" : ""} `} id={panel.id} style={{height: dynamicPanelHeight}}>
-			{settings?.viewType === "mobile" ? null : <Header isAuthorVersion={isAuthorVersion} host={host}/>}
+	return (panelNr !== 1 && panelNr !== 4 ?
+		<div className={`panel ${panel?.dark ? "darkPanel" : ""} `} id={panel.id}
+			 style={{height: isInEditor ? dynamicPanelHeight: ''}}
+		>
+			{settings?.viewType === "mobile" ? null : <Header isAuthorVersion={isAuthorVersion} host={host} />}
 			{panel?.background && (
 				<Background
 					backgroundProps={panel.background}
@@ -72,11 +79,12 @@ export default function Panel({
 							activeMenuItem={panel.activeMenuItem}
 							data={layer}
 							panelNr={panelNr}
+							isInEditor={isInEditor}
 							key={index}
 							viewType={viewType}
 						/>
 					);
 				})}
-		</div>
+		</div> : null
 	);
 }
