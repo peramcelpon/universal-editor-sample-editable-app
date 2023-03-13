@@ -53,7 +53,7 @@ export default function Panel({
 		}
 	}, [hash, ignoreHash, panel.id, setIgnoreHash]);
 
-	return (panelNr !== 1 && panelNr !== 4 ?
+	return (
 		<div className={`panel ${panel?.dark ? "darkPanel" : ""} `} id={panel.id}
 			 style={{height: isInEditor ? dynamicPanelHeight: ''}}
 		>
@@ -85,6 +85,6 @@ export default function Panel({
 						/>
 					);
 				})}
-		</div> : null
+		</div>
 	);
 }
