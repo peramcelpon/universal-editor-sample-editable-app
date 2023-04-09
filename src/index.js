@@ -11,6 +11,7 @@ root.render(
   </React.StrictMode>
 );
 
+
 // enable hot module replacement
 if (module.hot) {
   module.hot.accept();
