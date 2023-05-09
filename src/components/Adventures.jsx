@@ -12,7 +12,7 @@ import useGraphQL from '../api/useGraphQL';
 import Loading from './base/Loading';
 import "./Adventures.scss";
 import Title from './base/Title';
-import {getPublishHost} from "../utils/fetchData";
+import {getAuthorHost} from "../utils/fetchData";
 
 function AdventureItem(props) {
     const editorProps = {
@@ -30,7 +30,7 @@ function AdventureItem(props) {
          <li className="adventure-item" itemScope {...editorProps}>
           <div className="adventure-image-card">
           <Link to={`/adventure:${props.slug}${window.location.search}`}>
-            <img className="adventure-item-image" src={`${getPublishHost()}${props.primaryImage._path}`}
+            <img crossOrigin="anonymous" className="adventure-item-image" src={`${getAuthorHost()}${props.primaryImage._path}`}
                   alt={props.title} itemProp="primaryImage" itemType="image" />
           </Link>
           </div>

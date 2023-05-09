@@ -10,7 +10,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useGraphQL from '../api/useGraphQL';
 import { getArticle } from '../utils/commons';
-import { getPublishHost } from '../utils/fetchData';
+import { getAuthorHost } from '../utils/fetchData';
 import { mapJsonRichText } from '../utils/renderRichText';
 // import Error from './base/Error';
 import Loading from './base/Loading';
@@ -46,7 +46,7 @@ const Teaser = () => {
         <button>Read more</button>
       </Link>
     </article>
-    <img src={`${getPublishHost()}${featuredImage._path}`} alt={title} itemType="image" itemProp="featuredImage" />
+    <img crossOrigin='anonymous' src={`${getAuthorHost()}${featuredImage._path}`} alt={title} itemType="image" itemProp="featuredImage" />
   </section>
 );
   }

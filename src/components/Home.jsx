@@ -21,9 +21,10 @@ import "./Home.scss";
     return (
       <div className="Home">
         <Teaser />
+        <img alt="test" src="https://author-p15902-e147393-cmstg.adobeaemcloud.com/content/dam/wknd-shared/en/adventures/whistler-mountain-biking/adobestock-257501643.jpeg" crossOrigin='anonymous'/>
         <Adventures />
         <section className="newsletter">
-          <div className="content">
+          <div  className="content">
             <Title itemID="urn:aemconnection:/content/wknd/us/en/newsletter/jcr:content/root/container/title" itemProp="jcr:title" itemType="text"/>
             <Text itemID="urn:aemconnection:/content/wknd/us/en/newsletter/jcr:content/root/container/text" itemProp="text" itemType="richtext" />       
           </div>
@@ -39,7 +40,7 @@ import "./Home.scss";
           </Link>
         </section>
     </div>
-    );
+  );
 }
 
 export default Home;
