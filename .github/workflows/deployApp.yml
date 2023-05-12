@@ -3,7 +3,7 @@ name: Deploy to https://ue-remote-app.adobe.net
 on:
   push:
     branches:
-      - prod
+      - issue/re-enable-dev-app
     paths:
       - 'build/index.html'
 jobs:
@@ -23,5 +23,5 @@ jobs:
           overwrites-pull-request-comment: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGE_SITE_ID }}
         timeout-minutes: 1
