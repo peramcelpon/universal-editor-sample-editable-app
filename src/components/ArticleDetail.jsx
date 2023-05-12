@@ -7,25 +7,26 @@ it.
 */
 import React from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import backIcon from '../images/icon-close.svg';
-import Error from './Error';
-import Loading from './Loading';
+import backIcon from '../images/Back.svg';
+import Error from './base/Error';
+import Loading from './base/Loading';
 import {mapJsonRichText} from '../utils/renderRichText';
 import './AdventureDetail.scss';
 import useGraphQL from '../api/useGraphQL';
+import { getArticle } from '../utils/commons';
 import {getPublishHost} from "../utils/fetchData";
 
-function ArticleDetail() {
+function ArticleDetail({ article }) {
 
 	// params hook from React router
 	const {slug} = useParams();
 	const navigate = useNavigate();
-	const articleSlug = slug.substring(1);
+	const articleSlug = slug ? slug.substring(1) : article;
 
 	const persistentQuery = `wknd-shared/article-by-slug;slug=${articleSlug}`;
 
 	//Use a custom React Hook to execute the GraphQL query
-	const {data, errorMessage} = useGraphQL('', persistentQuery);
+	const {data, errorMessage} = useGraphQL(persistentQuery);
 
 	//If there is an error with the GraphQL query
 	if (errorMessage) return <Error errorMessage={errorMessage}/>;
@@ -48,9 +49,13 @@ function ArticleDetail() {
 	};
 
 	return (<div {...editorProps} itemScope className="adventure-detail">
-		<button className="adventure-detail-close-button" onClick={() => navigate(-1)}>
-			<img className="Backbutton-icon" src={backIcon} alt="Return"/>
-		</button>
+        <div class="adventure-detail-header">
+            <button className="adventure-detail-back-nav dark" onClick={() => navigate(-1)}>
+            <img className="Backbutton-icon" src={backIcon} alt="Return"/> Back
+            </button>
+            <h1 className="adventure-detail-title" itemProp="title" itemType="text">{currentArticle.title}</h1>
+            {/* <span className="pill default" itemProp="title" itemType="text">{currentAdventure.activity}</span> */}
+        </div>
 		<ArticleDetailRender {...currentArticle} slug={articleSlug}/>
 	</div>);
 }
@@ -64,14 +69,9 @@ function ArticleDetailRender({
 
 
 	return (<div>
-			<h1 className="adventure-detail-title" itemProp="title" itemType="text">{title}</h1>
-			<div className="adventure-detail-info">
-				<Contributer {...authorFragment} />
-				<Link to={`/articles/article:${slug}/aboutus`}>About Us</Link>
-			</div>
-			<div className="adventure-detail-content">
-				<img className="adventure-detail-primaryimage"
+            <img className="adventure-detail-primaryimage" itemType="image" itemProp="featuredImage"
 					 src={`${getPublishHost()}${featuredImage._path}`} alt={title}/>
+			<div className="adventure-detail-content">			
 				<div itemProp="main" itemType="richtext">{mapJsonRichText(main.json)}</div>
 			</div>
 		</div>
@@ -81,26 +81,12 @@ function ArticleDetailRender({
 function NoArticleFound() {
 	return (
 		<div className="adventure-detail">
-			<Link className="adventure-detail-close-button" to={"/"}>
+			<Link className="adventure-detail-close-button" to={`/${window.location.search}`}>
 				<img className="Backbutton-icon" src={backIcon} alt="Return"/>
 			</Link>
 			<Error errorMessage="Missing data, article could not be rendered."/>
 		</div>
 	);
-}
-
-/**
- * Helper function to get the first adventure from the response
- * @param {*} response
- */
-function getArticle(data) {
-	if (data && data.articleList && data.articleList.items) {
-		// expect there only to be a single adventure in the array
-		if (data.articleList.items.length === 1) {
-			return data.articleList.items[0];
-		}
-	}
-	return undefined;
 }
 
 function Contributer(props) {
