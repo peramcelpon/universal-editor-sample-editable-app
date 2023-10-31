@@ -21,7 +21,7 @@ function ArticleDetail({ article }) {
 	// params hook from React router
 	const {slug} = useParams();
 	const navigate = useNavigate();
-	const articleSlug = slug ? slug.substring(1) : article;
+	const articleSlug = slug || article;
 
 	const persistentQuery = `wknd-shared/article-by-slug;slug=${articleSlug}`;
 
@@ -69,7 +69,7 @@ function ArticleDetailRender({
 
 
 	return (<div>
-            <img className="adventure-detail-primaryimage" itemType="image" itemProp="featuredImage"
+            <img className="adventure-detail-primaryimage" itemType="media" itemProp="featuredImage"
 					 src={`${getPublishHost()}${featuredImage._path}`} alt={title}/>
 			<div className="adventure-detail-content">			
 				<div itemProp="main" itemType="richtext">{mapJsonRichText(main.json)}</div>

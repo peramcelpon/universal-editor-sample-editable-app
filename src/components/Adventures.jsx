@@ -18,7 +18,8 @@ function AdventureItem(props) {
     const editorProps = {
         itemID: "urn:aemconnection:" + props?._path + "/jcr:content/data/master",
         itemType: "reference",
-        itemfilter: "cf"
+        itemfilter: "cf",
+        "data-editor-itemlabel": props.slug
     };
 
   //Must have title, path, and image
@@ -29,9 +30,9 @@ function AdventureItem(props) {
   return (
          <li className="adventure-item" itemScope {...editorProps}>
           <div className="adventure-image-card">
-          <Link to={`/adventure:${props.slug}${window.location.search}`}>
+          <Link to={`/adventure/${props.slug}${window.location.search}`}>
             <img className="adventure-item-image" src={`${getPublishHost()}${props.primaryImage._path}`}
-                  alt={props.title} itemProp="primaryImage" itemType="image" />
+                  alt={props.title} itemProp="primaryImage" itemType="media" />
           </Link>
           </div>
           <h3 className="adventure-item-title" itemProp="title" itemType="text">{props.title.toLowerCase()}</h3>

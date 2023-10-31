@@ -26,10 +26,10 @@ const Article = ({_path, title, synopsis, authorFragment, slug}) => {
             <aside>
               <img className="article-item-image"
                 src={`${getPublishHost()}${authorFragment?.profilePicture._path}`}
-                alt={title} itemProp="profilePicture" itemType="image"/>
+                alt={title} itemProp="profilePicture" itemType="media"/>
             </aside>
             <article>
-              <Link to={`/articles/article:${slug}${window.location.search}`}>
+              <Link to={`/articles/article/${slug}${window.location.search}`}>
                   <h3 data-id="title" itemProp="title" itemType="text">{title}</h3>
               </Link>
 
@@ -39,7 +39,7 @@ const Article = ({_path, title, synopsis, authorFragment, slug}) => {
                   {mapJsonRichText(synopsis.json)}
                 </div>
               }
-              <Link to={`/articles/article:${slug}${window.location.search}`}>
+              <Link to={`/articles/article/${slug}${window.location.search}`}>
                 <button>Read more</button>
               </Link>
             </article>

@@ -24,7 +24,10 @@ const Teaser = () => {
 
 	//If query response is null then return a loading icon...
 	if (!data) return <Loading/>;
-  const { title, _path, featuredImage, synopsis } = getArticle(data);
+  
+  const article =  getArticle(data);
+  if(!article) return <></>
+  const { title, _path, featuredImage, synopsis } = article;
 
   const editorProps = {
 		itemID: "urn:aemconnection:" + _path + "/jcr:content/data/master",
@@ -42,11 +45,11 @@ const Teaser = () => {
         <span className='pill'>Magazine</span>
         <span className='pill'>Surfing</span>
       </div>
-      <Link to={`/articles/article:aloha-spirits-in-northern-norway${window.location.search}`}>
+      <Link to={`/articles/article/aloha-spirits-in-northern-norway${window.location.search}`}>
         <button>Read more</button>
       </Link>
     </article>
-    <img src={`${getPublishHost()}${featuredImage._path}`} alt={title} itemType="image" itemProp="featuredImage" />
+    {featuredImage && <img src={`${getPublishHost()}${featuredImage._path}`} alt={title} itemType="media" itemProp="featuredImage" />}
   </section>
 );
   }
